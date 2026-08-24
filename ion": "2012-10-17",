@@ -1,0 +1,40 @@
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "grafana-monitoring-ec2-role",
+        "RoleId": "AROAVIE3ZBM67TAUK4D4W",
+        "Arn": "arn:aws:iam::361103952701:role/grafana-monitoring-ec2-role",
+        "CreateDate": "2026-08-21T12:15:33+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "MaxSessionDuration": 3600,
+        "Tags": [
+            {
+                "Key": "ManagedBy",
+                "Value": "Terraform"
+            },
+            {
+                "Key": "Owner",
+                "Value": "DevOps"
+            },
+            {
+                "Key": "Project",
+                "Value": "grafana-monitoring"
+            }
+        ],
+        "RoleLastUsed": {
+            "LastUsedDate": "2026-08-24T11:48:36+00:00",
+            "Region": "us-east-1"
+        }
+    }
+}

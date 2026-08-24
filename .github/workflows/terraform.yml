@@ -1,0 +1,57 @@
+
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: Terraform Validate & Plan
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::361103952701:role/github-actions-two-app-pipeline
+          aws-region: us-east-1
+          role-session-name: terraform-ci
+          role-skip-session-tagging: true
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        env:
+          TF_VAR_allowed_ssh_cidr: ${{ vars.ALLOWED_SSH_CIDR }}
+          TF_VAR_key_name: ${{ secrets.KEY_NAME }}
+          TF_VAR_grafana_admin_password: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+        run: terraform plan -input=false
